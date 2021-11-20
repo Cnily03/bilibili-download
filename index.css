@@ -1,0 +1,218 @@
+:root {
+    --evolved-height: 166px;
+}
+
+@media screen and (max-width: 615px) {
+    body {
+        min-height: 100vh;
+        padding: 25px 5vw 0 5vw;
+    }
+
+    input#submit-white {
+        display: none;
+    }
+
+    input#submit-primary {
+        display: inline-block;
+    }
+
+    .jsholder {
+        display: inline-flex;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+}
+
+@media screen and (min-width: 615px) {
+    body {
+        min-height: 100vh;
+        padding: 30px calc(5vw + (125vw - 40rem) / 7) 0 calc(5vw + (125vw - 40rem) / 7);
+    }
+
+    input#submit-white {
+        display: inline-block;
+    }
+
+    input#submit-primary {
+        display: none;
+    }
+
+    .jsholder {
+        display: inline-flex;
+        flex-wrap: no-wrap;
+        width: 100%;
+    }
+}
+
+*::selection {
+    background-color: rgba(61, 170, 194, .25);
+    text-decoration: underline;
+}
+
+.box {
+    width: 100%;
+    height: max-content;
+}
+
+.box .title {
+    width: 100%;
+    /* white-space: nowrap; */
+}
+
+.footer-box {
+    letter-spacing: 20px;
+    width: 100%;
+    padding-bottom: 20px;
+    text-align: justify;
+    text-align-last: justify;
+    text-justify: distribute-all-lines;
+}
+
+.footer-text {
+    letter-spacing: normal;
+    width: fit-content;
+    display: inline-block;
+}
+
+textarea {
+    background-color: transparent !important;
+    word-wrap: break-word;
+    resize: none;
+    height: 10rem !important;
+    width: 100% !important;
+    overflow: hidden auto;
+    cursor: auto;
+}
+
+textarea#evolved {
+    height: 5rem !important;
+}
+
+#output-evolved .box {
+    overflow: hidden;
+    height: 0px;
+}
+
+#output-evolved .box.temp {
+    overflow: hidden;
+    height: fit-content;
+}
+
+#output-evolved .box.close {
+    height: 0px;
+    animation: wipe-close .8s ease;
+}
+
+#output-evolved .box.open {
+    height: var(--evolved-height);
+    animation: wipe-open .8s ease;
+}
+
+label[for="evolved"]:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.form-switch.form-slider {
+    margin: 0;
+    padding: 0;
+}
+
+.form-switch .form-icon.form-slider {
+    z-index: 10;
+    top: 0;
+    height: 100%;
+    width: max-content;
+    border: 0.05rem solid #bcc3ce !important;
+    border-radius: 0px;
+    font-style: normal;
+    text-align: center;
+    /* display: inline-block; */
+    line-height: 200%;
+    background-color: #F7F8F9;
+}
+
+.form-switch input:checked+.form-icon.form-slider {
+    background-color: #F7F8F9;
+    border: 0.05rem solid #bcc3ce;
+}
+
+.form-switch .form-icon.form-slider::before {
+    content: "OFF";
+    color: #FFF;
+    background-color: #E85600 !important;
+    border-radius: 4px;
+    height: 100%;
+    width: 2rem;
+    transition: background .5s, border .5s, box-shadow .5s, color .5s, left .5s;
+}
+
+.form-switch input:checked+.form-slider.form-icon::before {
+    content: "ON";
+    color: #FFF;
+    background-color: #32B643 !important;
+    left: calc(100% - 2rem);
+}
+
+.form-switch .form-icon.form-slider::after {
+    padding: 0 .3rem 0 2.3rem;
+    content: "强制 RPC";
+    width: fit-content;
+    height: 100%;
+    color: unset;
+    transition: color .5s, padding .5s;
+}
+
+.form-switch input:checked+.form-slider.form-icon::after {
+    padding: 0 2.3rem 0 .3rem;
+    color: unset;
+}
+
+
+@media (any-hover: hover) {
+    body {
+        overflow-y: scroll;
+    }
+
+    textarea::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    textarea::-webkit-scrollbar-track {
+        background-color: transparent;
+        width: 10px;
+    }
+
+    textarea::-webkit-scrollbar-thumb {
+        background-color: rgba(40, 44, 52, 0.3);
+    }
+
+    textarea::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(40, 44, 52, 0.5);
+    }
+
+    textarea::-webkit-scrollbar-button {
+        height: 0;
+    }
+}
+
+@keyframes wipe-close {
+    0% {
+        height: var(--evolved-height);
+    }
+
+    100% {
+        height: 0px;
+    }
+}
+
+@keyframes wipe-open {
+    0% {
+        height: 0px;
+    }
+
+    100% {
+        height: var(--evolved-height);
+    }
+}

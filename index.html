@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="favicon.ico">
+    <title>BiliBili Download Script</title>
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css@0.5.9/dist/spectre-icons.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css@0.5.9/dist/spectre-exp.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css@0.5.9/dist/spectre.min.css">
+    <link rel="stylesheet" href="./index.css">
+    <script src="./index.js" type="text/javascript" charset="UTF-8"></script>
+</head>
+
+<body>
+    <!-- Title -->
+    <div id='title' style="width: 100%; text-align: center;">
+        <label style="color: #242424; font-size: 40px;">B站视频下载脚本</label>
+    </div>
+    <!-- Bilibili Evolved -->
+    <div id='output-evolved' style="width: 100%; text-align: center; margin-bottom: 10px;">
+        <a id="control" style="cursor: pointer; user-select: none;">Click here to add <b>Bilibili-Evolved</b> temporarily</a>
+        <div class='box'>
+            <div style="height: 10px;"></div>
+            <div class='input-group' style="width: 100%;">
+                <span class="input-group-addon">
+                    <label for="evolved" class="tooltip tooltip-bottom"
+                        data-tooltip="Click to support the author on Github"
+                        onclick="window.open('https:\/\/github.com/the1812/Bilibili-Evolved')">
+                        <b>Bilibili-Evolved</b> By <i>Grant Howard</i>
+                    </label>
+                </span>
+                <div style="width: 100%;"></div>
+                <button id='copy-evolved' class="btn copy" style="float: right;">复制</button>
+            </div>
+            <textarea id='evolved' name='evolved' class="form-input" readonly></textarea>
+            <div style="height: 20px;"></div>
+        </div>
+    </div>
+    <!-- Form -->
+    <form action="" id='reqFrom' class="form-group" style="margin-top: 30px;">
+        <div class='input-group'>
+            <input type="text" id="query" class="form-input" name='query' placeholder="请输入链接或av/BV号（甚至可以不输入）">
+            <input type="button" id='go-bili' class="btn btn-primary" value="前往B站" style="display: none;"></input>
+        </div>
+        <div class='input-group'>
+            <span class="input-group-addon tooltip tooltip-right" data-tooltip="B站不支持的和登录状态不允许的画质会自动降级">
+                <label for="quality">画质</label>
+            </span>
+            <div class="tooltip tooltip-bottom" data-tooltip="选择画质后会自动刷新 js 代码">
+                <select id="quality" class="form-select" name="quality">
+                    <option value="4K">4K</option>
+                    <option value="1080p60">1080P 60帧</option>
+                    <option value="1080p+">1080P+</option>
+                    <option value="1080p">1080P</option>
+                    <option value="720p60">720P 60帧</option>
+                    <option value="720p">720P</option>
+                    <option value="480p">480P</option>
+                    <option value="360p">360P</option>
+                </select>
+            </div>
+            <input type="checkbox" name="enforce-rpc" style="display: none;">
+            <input type="submit" id='submit-white' class='btn input-group-btn' style="width: 100%;"
+                value="生成 js 代码"></input>
+            <input type="submit" id='submit-primary' class="btn btn-primary input-group-btn" style="width: 100%;"
+                value="生成 js 代码">
+        </div>
+    </form>
+    <!-- Output -->
+    <div style="width: 100%; text-align: center; margin: 30px 0 10px 0;">
+        <label style="font-size: 20px; color: #5F5DDA;">JavaScript 代码</label>
+    </div>
+    <div class="jsholder" id='output'>
+        <div class="box">
+            <div class='input-group' style="width: 100%;">
+                <span class="input-group-addon tooltip tooltip-right" data-tooltip="单集时直接下载，多集时显示提示框">
+                    <label for="auto">
+                        自动检测多P
+                    </label>
+                </span>
+                <label class="form-switch form-slider tooltip tooltip-up" id="enforce-rpc-container"
+                    data-tooltip="强制使用 RPC 下载">
+                    <input type="checkbox" name='enforce-rpc'>
+                    <i class="form-icon form-slider" id="i-enforce-rpc-checkbox"></i>
+                </label>
+                <script type="text/javascript">
+                    document.querySelector("#enforce-rpc-container").style.minWidth =
+                        document.querySelector("#i-enforce-rpc-checkbox").clientWidth + 'px';
+                </script>
+                <div style="width: 100%;"></div>
+                <button id='copy-auto' class="btn copy">复制</button>
+            </div>
+            <textarea id='auto' name='auto' class="form-input" readonly></textarea>
+        </div>
+        <div class="box">
+            <div class='input-group' style="width: 100%;">
+                <span class="input-group-addon tooltip tooltip-right" data-tooltip="只下载你所打开的B站页面的那一集">
+                    <label for="cur">
+                        只下载当前P
+                    </label>
+                </span>
+                <div style="width: 100%;"></div>
+                <button id='copy-cur' class="btn copy" style="float: right;">复制</button>
+            </div>
+            <textarea id='cur' name='cur' class="form-input" readonly></textarea>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer style="width: 100%; min-height: 10px; margin-top: 30px;">
+        <div class="footer-box">
+            <div class='footer-text'>
+                <a href="https://github.com/cnily03/bilibili-download" target="_blank">View on Github</a>
+            </div>
+            <div class='footer-text'>
+                <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a>
+                Copyright (c) 2021 Jevon Wang
+            </div>
+            <div class='footer-text'>
+                CSS Powered By <a href="https://picturepan2.github.io/spectre" target="_blank">Spectre.css</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
