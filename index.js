@@ -14,15 +14,17 @@ const queryParam = (function () {
 
 // const
 const DLBILI = {
-    HOST: 'https://cdn.jsdelivr.net/gh/cnily03',
+    HOST: 'https://cdn.jsdelivr.net/gh/Cnily03',
     DIR: (() => {
         let pathArr = window.location.pathname.split('/');
+        pathArr[pathArr.length - 2] += '@master';
         pathArr[pathArr.length - 1] = '';
         return pathArr.join('/');
     })(),
     SUB_DIR: 'dist/'
 };
 const QUAILITY_TABLE = {
+    'HDR': 125,
     '4K': 120,
     '1080p60': 116,
     '1080p+': 112,
@@ -30,14 +32,15 @@ const QUAILITY_TABLE = {
     '720p60': 74,
     '720p': 64,
     '480p': 32,
-    '360p': 16
+    '360p': 16,
+    '240p': 6
 };
-const js_addJS = "j=(t=>{let e=document.createElement('script');e.type='text/javascript';e.src=t;document.getElementsByTagName('head')[0].appendChild(e)});";
+const js_addJS = "j=t=>new Promise(r=>{let e=document.createElement('script');e.type='text/javascript',e.src=t,e.readyState?e.onreadystatechange=(()=>{['loaded','complete'].includes(e.readyState)&&r()}):e.onload=(()=>{r()});document.getElementsByTagName('head')[0].appendChild(e)});";
 
 // handle params
 var query = queryParam.query || '';
 var quality = queryParam.quality || '1080p+';
-var enforceRPC = queryParam['enforce-rpc'] ? true : false;
+var enforceRPC = !!queryParam['enforce-rpc'];
 const qs = [query, quality, enforceRPC];
 quality = QUAILITY_TABLE[quality];
 
@@ -91,9 +94,9 @@ const zipTxt = (str) => {
 // Generate uncrypted js string;
 const genEvalStr = {
     gen: (filename, funcRun, detectVar) => {
-        return js_addJS +
-            "if(!" + detectVar + ")j('" + DLBILI.HOST + DLBILI.DIR + DLBILI.SUB_DIR + filename + "');" +
-            "dlbi=setInterval(()=>{if(" + detectVar + "){clearInterval(dlbi);" + funcRun + "}},9)";
+        return putAsync(js_addJS +
+            "if(!" + detectVar + ")await j('" + DLBILI.HOST + DLBILI.DIR + DLBILI.SUB_DIR + filename + "');" +
+            funcRun);
     },
     auto: () => {
         return genEvalStr.gen("dlbili.auto.min.js",
@@ -104,13 +107,22 @@ const genEvalStr = {
         return genEvalStr.gen("dlbili.cur.min.js", "dlbiliCur('" + genQnParam() + "')", "window.dlbCur");
     },
     evolved: () => {
-        return js_addJS + "if(!window.EventTarget)j(" + DLBILI.HOST + DLBILI.DIR + DLBILI.SUB_DIR + "addEvolved.js)";
+        return js_addJS +
+            "if(!window.biliEvolved)j('" + DLBILI.HOST + DLBILI.DIR + DLBILI.SUB_DIR + "addEvolved.js')";
     }
 }
 
 function updateOutput() {
     document.querySelector('#output #auto').value = zipTxt(genEvalStr.auto());
-    document.querySelector('#output #cur').value = zipTxt(genEvalStr.cur());
+    if (quality < 120) {
+        document.querySelector('#output #cur').value = zipTxt(genEvalStr.cur());
+        document.querySelector('#output #cur').classList.remove("unsupport");
+        document.querySelector('button#copy-cur').disabled = false;
+    } else {
+        document.querySelector('#output #cur').value = "4K 及以上画质不支持网页下载，请使用「" + document.querySelector("label[for='auto']").innerText + "」脚本";
+        document.querySelector('#output #cur').classList.add("unsupport");
+        document.querySelector('button#copy-cur').disabled = true;
+    }
 }
 // 复制
 var onCopy = {

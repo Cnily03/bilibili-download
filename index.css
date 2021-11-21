@@ -1,5 +1,11 @@
+@import url('https://fonts.font.im/css?family=Merriweather:400,400i');
+
 :root {
     --evolved-height: 166px;
+}
+
+.realname {
+    font-family: 'Merriweather', serif;
 }
 
 @media screen and (max-width: 615px) {
@@ -20,6 +26,10 @@
         display: inline-flex;
         flex-wrap: wrap;
         width: 100%;
+    }
+
+    textarea.unsupport {
+        height: 3rem !important;
     }
 
 }
@@ -48,6 +58,20 @@
 *::selection {
     background-color: rgba(61, 170, 194, .25);
     text-decoration: underline;
+}
+
+option {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+
+select:focus option:checked {
+    background-color: #D9D9F4;
+}
+
+select:focus option:disabled {
+    color: #D9D9F4;
 }
 
 .box {
@@ -83,6 +107,12 @@ textarea {
     width: 100% !important;
     overflow: hidden auto;
     cursor: auto;
+    transition: height 1s ease;
+    transition: background .2s, border .2s, box-shadow .2s, color .2s, height .5s !important;
+}
+
+textarea.unsupport {
+    color: #E85600;
 }
 
 textarea#evolved {
@@ -117,6 +147,7 @@ label[for="evolved"]:hover {
 .form-switch.form-slider {
     margin: 0;
     padding: 0;
+    user-select: none;
 }
 
 .form-switch .form-icon.form-slider {

@@ -11,7 +11,7 @@ const dlbiliCur = async (videoQuality) => {
         let stri = str.replace(/\?.*/, '').split('.');
         return '.' + stri[stri.length - 1];
     }
-    addJs('https://cdn.jsdelivr.net/gh/Stuk/jszip@3.7.1/dist/jszip.min.js');
+    await addJs('https://cdn.jsdelivr.net/gh/Stuk/jszip@3.7.1/dist/jszip.min.js');
     /**
      * Download a zip or video file then through urls
      * @param {Array} urls a video url array (360p will return not one url)
@@ -80,6 +80,7 @@ const dlbiliCur = async (videoQuality) => {
                 'cid=' + cid +
                 '&' + VIDEO_QUALITY +
                 '&bvid=' + bvid,
+            type: 'GET',
             dataType: 'json',
             success: (data) => {
                 resolve(data.data.durl)

@@ -11,7 +11,7 @@ const dlbiliAuto = async (videoQuality, enforceRPC = false) => {
         V_INFO: 'https://api.bilibili.com/x/web-interface/view?',
         V_URL: 'https://api.bilibili.com/x/player/playurl?'
     };
-    var vInfoPages, vTitle, dlFourk, pagesStrLen, rpc_s, rpc_f;
+    var vInfoPages, vTitle, overFourk, pagesStrLen, rpc_s, rpc_f;
     const bvid = window.bvid; // B站储存的变量
     const curPage = window.p + 1; // B站储存的变量
     const cryptoBase64 = window.btoa; // window 本身含有的函数
@@ -22,6 +22,7 @@ const dlbiliAuto = async (videoQuality, enforceRPC = false) => {
     await new Promise((resolve) => {
         $.ajax({
             url: API.V_INFO + 'bvid=' + bvid,
+            type: 'GET',
             dataType: 'json',
             success: (dataBack) => {
                 resolve(dataBack.data)
@@ -98,7 +99,7 @@ const dlbiliAuto = async (videoQuality, enforceRPC = false) => {
             })
         }
     }
-    addJs('https://cdn.jsdelivr.net/gh/Stuk/jszip@3.7.1/dist/jszip.min.js');
+    await addJs('https://cdn.jsdelivr.net/gh/Stuk/jszip@3.7.1/dist/jszip.min.js');
     /**
      * Download a zip or video file then through urls
      * @param {Array} urls a video url array (360p will return not one url)
@@ -177,19 +178,20 @@ const dlbiliAuto = async (videoQuality, enforceRPC = false) => {
                 url: API.V_URL +
                     'cid=' + vInfoPages[page - 1].cid +
                     '&' + CONFIG.VIDEO_QUALITY + '&bvid=' + bvid,
+                type: 'GET',
                 dataType: 'json',
                 success: (data) => {
                     resolve(data.data)
                 }
             })
         }).then(data => {
-            dlFourk = data.quality == 120;
+            overFourk = data.quality >= 120;
             data.durl.forEach(ele => {
                 urls.push(ele.url);
             });
         });
         // 4K directly downloading is not supported
-        if (!isReturn && dlFourk) {
+        if (!isReturn && overFourk) {
             dl_morePages([page]);
             return;
         }

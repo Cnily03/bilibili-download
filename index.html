@@ -21,7 +21,8 @@
     </div>
     <!-- Bilibili Evolved -->
     <div id='output-evolved' style="width: 100%; text-align: center; margin-bottom: 10px;">
-        <a id="control" style="cursor: pointer; user-select: none;">Click here to add <b>Bilibili-Evolved</b> temporarily</a>
+        <a id="control" style="cursor: pointer; user-select: none;">Click here to add <b>Bilibili Evolved</b>
+            temporarily</a>
         <div class='box'>
             <div style="height: 10px;"></div>
             <div class='input-group' style="width: 100%;">
@@ -29,7 +30,7 @@
                     <label for="evolved" class="tooltip tooltip-bottom"
                         data-tooltip="Click to support the author on Github"
                         onclick="window.open('https:\/\/github.com/the1812/Bilibili-Evolved')">
-                        <b>Bilibili-Evolved</b> By <i>Grant Howard</i>
+                        <b>Bilibili Evolved</b> By <i class="realname">Grant Howard</i>
                     </label>
                 </span>
                 <div style="width: 100%;"></div>
@@ -49,16 +50,18 @@
             <span class="input-group-addon tooltip tooltip-right" data-tooltip="B站不支持的和登录状态不允许的画质会自动降级">
                 <label for="quality">画质</label>
             </span>
-            <div class="tooltip tooltip-bottom" data-tooltip="选择画质后会自动刷新 js 代码">
+            <div class="tooltip tooltip-top" data-tooltip="选择画质后会自动刷新 js 代码">
                 <select id="quality" class="form-select" name="quality">
-                    <option value="4K">4K</option>
-                    <option value="1080p60">1080P 60帧</option>
-                    <option value="1080p+">1080P+</option>
-                    <option value="1080p">1080P</option>
-                    <option value="720p60">720P 60帧</option>
-                    <option value="720p">720P</option>
-                    <option value="480p">480P</option>
-                    <option value="360p">360P</option>
+                    <option value="HDR" disabled>HDR 真彩色</option>
+                    <option value="4K">4K 超清</option>
+                    <option value="1080p60">1080P60 高帧率</option>
+                    <option value="1080p+">1080P+ 高码率</option>
+                    <option value="1080p">1080P 高清</option>
+                    <option value="720p60">720P60 高帧率</option>
+                    <option value="720p">720P 高清</option>
+                    <option value="480p">480P 清晰</option>
+                    <option value="360p">360P 流畅</option>
+                    <option value="240p">240P 极速</option>
                 </select>
             </div>
             <input type="checkbox" name="enforce-rpc" style="display: none;">
@@ -75,13 +78,16 @@
     <div class="jsholder" id='output'>
         <div class="box">
             <div class='input-group' style="width: 100%;">
-                <span class="input-group-addon tooltip tooltip-right" data-tooltip="单集时直接下载，多集时显示提示框">
+                <span class="input-group-addon tooltip tooltip-right" data-tooltip="单集时直接下载，多集时选择下载">
                     <label for="auto">
                         自动检测多P
                     </label>
                 </span>
+                <!-- justify -->
+                <div style="width: 100%;"></div>
+                <!-- Enforce RPC -->
                 <label class="form-switch form-slider tooltip tooltip-up" id="enforce-rpc-container"
-                    data-tooltip="强制使用 RPC 下载">
+                    style="margin-right: 2px;" data-tooltip="强制使用 RPC 下载">
                     <input type="checkbox" name='enforce-rpc'>
                     <i class="form-icon form-slider" id="i-enforce-rpc-checkbox"></i>
                 </label>
@@ -89,19 +95,21 @@
                     document.querySelector("#enforce-rpc-container").style.minWidth =
                         document.querySelector("#i-enforce-rpc-checkbox").clientWidth + 'px';
                 </script>
-                <div style="width: 100%;"></div>
+                <!-- copy -->
                 <button id='copy-auto' class="btn copy">复制</button>
             </div>
             <textarea id='auto' name='auto' class="form-input" readonly></textarea>
         </div>
         <div class="box">
             <div class='input-group' style="width: 100%;">
-                <span class="input-group-addon tooltip tooltip-right" data-tooltip="只下载你所打开的B站页面的那一集">
+                <span class="input-group-addon tooltip tooltip-right" data-tooltip="在网页直接下载当前页面的那一集">
                     <label for="cur">
                         只下载当前P
                     </label>
                 </span>
+                <!-- justify -->
                 <div style="width: 100%;"></div>
+                <!-- copy -->
                 <button id='copy-cur' class="btn copy" style="float: right;">复制</button>
             </div>
             <textarea id='cur' name='cur' class="form-input" readonly></textarea>
@@ -115,7 +123,7 @@
             </div>
             <div class='footer-text'>
                 <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a>
-                Copyright (c) 2021 Jevon Wang
+                Copyright (c) 2021 <i class="realname">Jevon Wang</i>
             </div>
             <div class='footer-text'>
                 CSS Powered By <a href="https://picturepan2.github.io/spectre" target="_blank">Spectre.css</a>
