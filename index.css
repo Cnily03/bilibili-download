@@ -122,21 +122,19 @@ textarea#evolved {
 #output-evolved .box {
     overflow: hidden;
     height: 0px;
+    transition: height .8s ease;
 }
 
 #output-evolved .box.temp {
-    overflow: hidden;
     height: fit-content;
 }
 
 #output-evolved .box.close {
     height: 0px;
-    animation: wipe-close .8s ease;
 }
 
 #output-evolved .box.open {
     height: var(--evolved-height);
-    animation: wipe-open .8s ease;
 }
 
 label[for="evolved"]:hover {
@@ -225,25 +223,5 @@ label[for="evolved"]:hover {
 
     textarea::-webkit-scrollbar-button {
         height: 0;
-    }
-}
-
-@keyframes wipe-close {
-    0% {
-        height: var(--evolved-height);
-    }
-
-    100% {
-        height: 0px;
-    }
-}
-
-@keyframes wipe-open {
-    0% {
-        height: 0px;
-    }
-
-    100% {
-        height: var(--evolved-height);
     }
 }
