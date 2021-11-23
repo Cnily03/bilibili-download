@@ -8,9 +8,12 @@
 
 ## 注意
 
-- 暂时不支持下载番剧/电影视频
-- 「只下载当前P」不支持下载 4K 及以上画质视频
-- 若选择的画质是B站不支持的、或者登录状态不允许的，会自动降级至支持的最高画质
+- 暂时不支持下载番剧/电影视频。
+
+- 「只下载当前P」不支持下载 4K 及以上画质视频。
+
+- 若选择的画质是B站不支持的、或者登录状态不允许的，会自动降级至支持的最高画质。
+
 - 移动端以电脑版网站浏览，在网址输入 `javascript: 脚本内容` 依然有效（部分套壳类浏览器不支持网址栏执行脚本，建议使用 Chrome / Edge 浏览器）。
 
 ## 推荐
@@ -19,6 +22,6 @@
 
 ## 临时渲染 Tampermonkey 脚本
 
-为了满足临时需求，该控制台脚本同时配设了临时增加 Bilibili Evolved 的功能。由于部分功能需要重载网页，但控制台脚本重载后会失效，所以临时的 Bilibili Evolved 可能会有部分功能无法使用。
+为了满足临时需求，该控制台脚本同时配设了临时增加 Bilibili Evolved 的功能。由于部分功能需要重载网页，所以数据储存的替代方案为采用 Cookie, 刷新网页后在再次在控制台执行脚本后即可生效。临时的 Bilibili Evolved 可能会有部分功能无法使用。
 
-临时 Tampermonkey 脚本环境渲染[支持文件](https://github.com/Cnily03/bilibili-download/blob/master/src/tampermonkeyEnv.js)位于 [src](https://github.com/Cnily03/bilibili-download/tree/master/src) 目录内，目前只配置了 Bilibili Evolved 相关的环境。
+临时 Tampermonkey 脚本环境渲染[支持文件](https://github.com/Cnily03/bilibili-download/blob/master/src/tampermonkeyEnv.js)位于 [src](https://github.com/Cnily03/bilibili-download/tree/master/src) 目录内，目前只配置了 Bilibili Evolved 相关的环境，但已重写的兼容性 `grant` 函数对大部分 Tampermonkey 脚本仍能起效。
