@@ -4,7 +4,7 @@ window.unsafeWindow = window;
 class PluginCookie {
     constructor(pluginName, maxAge = 30 * 24 * 60 * 60) {
         this.MAX_AGE = maxAge;
-        this.PLUGIN_NAME = pluginName.replace(/ /g, '-');
+        this.PLUGIN_NAME = pluginName.replace(/ /g, "-");
         this.COOKIE_NAME = "Tampermonkey." + this.PLUGIN_NAME;
     }
     jsonVal() {
@@ -25,16 +25,24 @@ class PluginCookie {
     set(name, value) {
         let obj = this.jsonVal();
         obj[name] = value;
-        document.cookie = this.COOKIE_NAME + '=' + JSON.stringify(obj) +
-            "; max-age=" + this.MAX_AGE.toString();
+        document.cookie =
+            this.COOKIE_NAME +
+            "=" +
+            JSON.stringify(obj) +
+            "; max-age=" +
+            this.MAX_AGE.toString();
         if (JSON.stringify(obj) == "{}") this.delCookie();
         return value;
     }
     remove(name) {
         let obj = this.jsonVal();
         delete obj[name];
-        document.cookie = this.COOKIE_NAME + '=' + JSON.stringify(obj) +
-            "; max-age=" + this.MAX_AGE.toString();
+        document.cookie =
+            this.COOKIE_NAME +
+            "=" +
+            JSON.stringify(obj) +
+            "; max-age=" +
+            this.MAX_AGE.toString();
         if (!Object.keys(obj).length) this.delCookie();
         return true;
     }
@@ -43,39 +51,44 @@ class PluginCookie {
     }
 }
 var valSave = {
-    add: (pluginName) => {
+    add: pluginName => {
         valSave[pluginName] = new PluginCookie(pluginName);
     },
-    remove: (pluginName) => {
+    remove: pluginName => {
         delete valSave[pluginName];
-    }
+    },
 };
 //valSave.add(window.GM_info.script.name);
-valSave.add('Bilibili-Evolved');
-window.GM_getValue = (t) => window.valSave['Bilibili-Evolved'].get(t);
-window.GM_setValue = (e, t) => window.valSave['Bilibili-Evolved'].set(e, t);
+valSave.add("Bilibili-Evolved");
+window.GM_getValue = t => window.valSave["Bilibili-Evolved"].get(t);
+window.GM_setValue = (e, t) => window.valSave["Bilibili-Evolved"].set(e, t);
 // GM_setClipboard
 window.GM_setClipboard = (c, t) => {
-    if (t == 'text') t = 'text/plain'
-    const copyReact = (e) => {
+    if (t == "text") t = "text/plain";
+    const copyReact = e => {
         e.clipboardData.setData(t, c);
         e.preventDefault();
-    }
-    document.addEventListener('copy', copyReact);
+    };
+    document.addEventListener("copy", copyReact);
     try {
-        document.execCommand('copy');
+        document.execCommand("copy");
     } catch (e) {
-        alert('你的浏览器不支持复制，请安装 Tampermonkey 插件使用 Bilibili Evolved.');
+        alert(
+            "你的浏览器不支持复制，请安装 Tampermonkey 插件使用 Bilibili Evolved."
+        );
     }
-    document.removeEventListener('copy', copyReact);
-}
+    document.removeEventListener("copy", copyReact);
+};
 // GM_xmlhttpRequest
-window.GM_xmlhttpRequest = (json) => {
+window.GM_xmlhttpRequest = json => {
     const xhr = new XMLHttpRequest();
     xhr.open(json.method, json.url, true);
-    xhr.responseType = json.responseType || 'text';
-    xhr.setRequestHeader("Content-Type", json.contentType || "application/x-www-form-urlencoded");
+    xhr.responseType = json.responseType || "text";
+    xhr.setRequestHeader(
+        "Content-Type",
+        json.contentType || "application/x-www-form-urlencoded"
+    );
     xhr.onload = () => json.onload(xhr);
     xhr.onerror = () => json.onerror(xhr);
     xhr.send(json.data || null);
-}
+};
