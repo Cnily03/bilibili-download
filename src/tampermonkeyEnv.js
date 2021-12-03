@@ -2,8 +2,15 @@
 window.unsafeWindow = window;
 // GM_getValue & GM_setValue
 class PluginCookie {
-    constructor(pluginName, maxAge = 30 * 24 * 60 * 60) {
-        this.MAX_AGE = maxAge;
+    constructor(pluginName, options = { domain, maxAge }) {
+        this.MAX_AGE =
+            options.maxAge ||
+            (typeof options === "number" ? options : null) ||
+            30 * 24 * 60 * 60;
+        this.DOMAIN =
+            options.domain ||
+            (typeof options === "string" ? options : null) ||
+            window.location.host;
         this.PLUGIN_NAME = pluginName.replace(/ /g, "-");
         this.COOKIE_NAME = "Tampermonkey." + this.PLUGIN_NAME;
     }
@@ -25,29 +32,23 @@ class PluginCookie {
     set(name, value) {
         let obj = this.jsonVal();
         obj[name] = value;
-        document.cookie =
-            this.COOKIE_NAME +
-            "=" +
-            JSON.stringify(obj) +
-            "; max-age=" +
-            this.MAX_AGE.toString();
+        document.cookie = `${this.COOKIE_NAME}=${JSON.stringify(
+            obj
+        )}; max-age=${this.MAX_AGE.toString()}; domain=${this.DOMAIN}`;
         if (JSON.stringify(obj) == "{}") this.delCookie();
         return value;
     }
     remove(name) {
         let obj = this.jsonVal();
         delete obj[name];
-        document.cookie =
-            this.COOKIE_NAME +
-            "=" +
-            JSON.stringify(obj) +
-            "; max-age=" +
-            this.MAX_AGE.toString();
+        document.cookie = `${this.COOKIE_NAME}=${JSON.stringify(
+            obj
+        )}; max-age=${this.MAX_AGE.toString()}; domain=${this.DOMAIN}`;
         if (!Object.keys(obj).length) this.delCookie();
         return true;
     }
     delCookie() {
-        document.cookie = this.COOKIE_NAME + "=; max-age=0";
+        document.cookie = `${this.COOKIE_NAME}=; max-age=0; domain=${this.DOMAIN}`;
     }
 }
 var valSave = {
@@ -58,15 +59,16 @@ var valSave = {
         delete valSave[pluginName];
     },
 };
-//valSave.add(window.GM_info.script.name);
+// valSave.add(window.GM_info.script.name);
 valSave.add("Bilibili-Evolved");
-window.GM_getValue = t => window.valSave["Bilibili-Evolved"].get(t);
-window.GM_setValue = (e, t) => window.valSave["Bilibili-Evolved"].set(e, t);
+window.GM_getValue = query => window.valSave["Bilibili-Evolved"].get(query);
+window.GM_setValue = (name, value) =>
+    window.valSave["Bilibili-Evolved"].set(name, value);
 // GM_setClipboard
-window.GM_setClipboard = (c, t) => {
-    if (t == "text") t = "text/plain";
+window.GM_setClipboard = (text, type) => {
+    if (type == "text") type = "text/plain";
     const copyReact = e => {
-        e.clipboardData.setData(t, c);
+        e.clipboardData.setData(type, text);
         e.preventDefault();
     };
     document.addEventListener("copy", copyReact);

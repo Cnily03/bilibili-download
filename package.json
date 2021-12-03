@@ -1,7 +1,7 @@
 {
   "name": "bilibili-download",
   "description": "该脚本的优点为便利性。只需要复制脚本后在控制台执行，即可达到下载B站视频的效果。",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "dist/dlbili.auto.js",
   "scripts": {
     "minify": "gulp"

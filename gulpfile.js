@@ -2,7 +2,10 @@ var gulp = require("gulp");
 var minifyCss = require("gulp-minify-css");
 var uglify = require("gulp-uglify");
 var rename = require("gulp-rename");
-gulp.task("page", done => {
+function reserveComment(node, comment) {
+    return /^\!/.test(comment.value);
+}
+gulp.task("page", cb => {
     // CSS
     gulp.src(["./index.css"])
         .pipe(rename({ suffix: ".min" }))
@@ -18,35 +21,35 @@ gulp.task("page", done => {
             })
         )
         .pipe(gulp.dest("./"));
-    done();
+    cb();
 });
-gulp.task("project", done => {
+gulp.task("project", cb => {
     // dist
     gulp.src(["dist/**/*.js", "!**/*.min.js"], { base: "dist/" })
         .pipe(rename({ suffix: ".min" }))
         .pipe(
             uglify({
                 mangle: { reserved: ["p"] },
-                output: { ascii_only: true },
+                output: { ascii_only: true, comments: reserveComment },
             })
         )
         .pipe(gulp.dest("dist/"));
-    // source
+    // src -> min
     gulp.src(["src/**/*.js", "!**/*.min.js"], { base: "src/" })
         .pipe(
             uglify({
                 mangle: true,
-                output: { ascii_only: true },
+                output: { ascii_only: true, comments: reserveComment },
             })
         )
         .pipe(gulp.dest("min/"));
-    done();
+    cb();
 });
 gulp.task("watch", () => {
     gulp.watch(
         ["dist/**/*.js", "src/**/*.js", "!**/*.min.js"],
-        gulp.series(["project"])
+        gulp.parallel(["project"])
     );
-    gulp.watch(["./index.css", "./index.js"], gulp.series(["page"]));
+    gulp.watch(["./index.css", "./index.js"], gulp.parallel(["page"]));
 });
-gulp.task("default", gulp.series(["page", "project"]));
+gulp.task("default", gulp.parallel(["page", "project"]));
