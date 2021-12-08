@@ -1,5 +1,7 @@
 var gulp = require("gulp");
 var minifyCss = require("gulp-minify-css");
+var compileTS = require("gulp-typescript").createProject("tsconfig.json");
+var gulpFitler = require("gulp-filter");
 var uglify = require("gulp-uglify");
 var rename = require("gulp-rename");
 var gulpClean = require("gulp-clean");
@@ -28,29 +30,40 @@ gulp.task("page", cb => {
         .pipe(gulp.dest("./"));
     cb();
 });
-gulp.task("project", cb => {
-    clean(["dist/**/*.min.js", "min/**/*.*"]);
+gulp.task("project:dist", () => {
+    clean(["dist/**/*.min.js"]);
+    var tsFitler = gulpFitler(["**/*.ts"], { restore: true });
     // dist
-    gulp.src(["dist/**/*.js", "!**/*.min.js"], { base: "dist/" })
+    return gulp.src(["dist/**/*.{ts,js}", "!**/*.min.js"], { base: "dist/" })
+        .pipe(tsFitler)
+        .pipe(compileTS()).js
+        .pipe(tsFitler.restore)
         .pipe(rename({ suffix: ".min" }))
         .pipe(
             uglify({
-                mangle: { reserved: ["p"] },
+                mangle: { reserved: ["p", "j"] },
                 output: { ascii_only: true, comments: reserveComment },
             })
         )
         .pipe(gulp.dest("dist/"));
+});
+gulp.task("project:src", () => {
+    clean(["min/**/*.*"]);
+    var tsFitler = gulpFitler(["**/*.ts"], { restore: true });
     // src -> min
-    gulp.src(["src/**/*.js"], { base: "src/" })
+    return gulp.src(["src/**/*.{ts,js}"], { base: "src/" })
+        .pipe(tsFitler)
+        .pipe(compileTS()).js
+        .pipe(tsFitler.restore)
         .pipe(
             uglify({
-                mangle: true,
+                mangle: { reserved: ["p", "j"] },
                 output: { ascii_only: true, comments: reserveComment },
             })
         )
         .pipe(gulp.dest("min/"));
-    cb();
 });
+gulp.task("project", gulp.series(["project:src", "project:dist"]));
 gulp.task("watch", () => {
     gulp.watch(
         ["dist/**/*.js", "src/**/*.js", "!**/*.min.js"],

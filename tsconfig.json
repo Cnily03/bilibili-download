@@ -1,0 +1,8 @@
+{
+    "include": ["src","dist"],
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "target": "ES6",
+        "strict": false
+    }
+}
