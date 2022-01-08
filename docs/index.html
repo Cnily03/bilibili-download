@@ -21,8 +21,8 @@
     </div>
     <!-- Bilibili Evolved -->
     <div id='output-evolved' style="width: 100%; text-align: center; margin-bottom: 10px;">
-        <a id="control" style="cursor: pointer; user-select: none;">Click here to add <b>Bilibili Evolved</b>
-            temporarily</a>
+        <a id="control" style="cursor: pointer; user-select: none;">
+            Click here to apply <b>Bilibili Evolved</b> temporarily</a>
         <div class='box'>
             <div style="height: 10px;"></div>
             <div class='input-group' style="width: 100%;">
@@ -65,6 +65,7 @@
                 </select>
             </div>
             <input type="checkbox" name="enforce-rpc" style="display: none;">
+            <input type="checkbox" name="urlbar" style="display: none;">
             <input type="submit" id='submit-white' class='btn input-group-btn' style="width: 100%;"
                 value="生成 js 代码"></input>
             <input type="submit" id='submit-primary' class="btn btn-primary input-group-btn" style="width: 100%;"
@@ -72,8 +73,13 @@
         </div>
     </form>
     <!-- Output -->
-    <div style="width: 100%; text-align: center; margin: 30px 0 10px 0;">
-        <label style="font-size: 20px; color: #5F5DDA;">JavaScript 代码</label>
+    <div
+        style="width: 100%; text-align: center; margin: 30px 0 10px 0; display: inline-flex; align-items: center; justify-content: center;">
+        <button id="code-style" class="btn btn-sm btn-code-style tooltip tooltip-top"
+            data-tooltip="在代码前添加「javascript:」">javascript:</button>
+        <label style="font-size: 20px; color: #5F5DDA;">
+            JavaScript 代码
+        </label>
     </div>
     <div class="jsholder" id='output'>
         <div class="box">
@@ -96,7 +102,7 @@
                         document.querySelector("#i-enforce-rpc-checkbox").clientWidth + 'px';
                 </script>
                 <!-- copy -->
-                <button id='copy-auto' class="btn copy">复制</button>
+                <button id='copy-auto' class="btn btn-copy">复制</button>
             </div>
             <textarea id='auto' name='auto' class="form-input" readonly></textarea>
         </div>
@@ -110,7 +116,7 @@
                 <!-- justify -->
                 <div style="width: 100%;"></div>
                 <!-- copy -->
-                <button id='copy-cur' class="btn copy" style="float: right;">复制</button>
+                <button id='copy-cur' class="btn btn-copy" style="float: right;">复制</button>
             </div>
             <textarea id='cur' name='cur' class="form-input" readonly></textarea>
         </div>

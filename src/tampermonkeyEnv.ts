@@ -30,8 +30,8 @@ const _default = {
         globalOptions: {
             crypto: false,
             maxAge: 30 * 24 * 60 * 60,
-            domain: window.escape(window.location.hostname),
-            path: window.escape(window.location.pathname)
+            domain: window.encodeURIComponent(window.location.hostname),
+            path: window.decodeURI(window.location.pathname)
         },
         cryptoOptions: {
             encrypto: (str: string) => {
@@ -61,7 +61,7 @@ class ConfigCookie {
 
         if (typeof options.crypto === 'boolean') {
             this.IS_CRYPTO = options.crypto;
-            this.CRYPTO_INFO = _default.ConfigCookie.cryptoOptions;
+            this.CRYPTO_INFO = JSON.parse(JSON.stringify(_default.ConfigCookie.cryptoOptions));
         }
         else if (typeof options.crypto === "object") {
             this.IS_CRYPTO = true;
@@ -98,7 +98,7 @@ class ConfigCookie {
         }
         return {};
     }
-    saveCookie(json: object, isDelete = false) {
+    saveCookie(json: object, isDelete: boolean = false) {
         document.cookie = `${this.COOKIE_NAME}=${this.autoEncrypto(JSON.stringify(json))}; `
             + `max-age=${isDelete ? "0" : this.OPTIONS.MAX_AGE.toString()}; `
             + `domain=${this.OPTIONS.DOMAIN}; `

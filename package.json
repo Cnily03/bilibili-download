@@ -5,7 +5,7 @@
   "main": "dist/dlbili.auto.js",
   "scripts": {
     "pack": "gulp",
-    "pack:page": "gulp page",
+    "pack:docs": "gulp docs",
     "pack:project": "gulp project"
   },
   "repository": {

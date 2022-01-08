@@ -12,14 +12,14 @@ function clean(arr) {
     arr = typeof arr === "string" ? [arr] : arr;
     gulp.src(arr, { read: false }).pipe(gulpClean());
 }
-gulp.task("page", cb => {
+gulp.task("docs", cb => {
     // CSS
-    gulp.src(["./index.css"])
+    gulp.src(["./docs/index.css"])
         .pipe(rename({ suffix: ".min" }))
         .pipe(minifyCss())
-        .pipe(gulp.dest("./"));
+        .pipe(gulp.dest("./docs/"));
     // Javascript
-    gulp.src(["./index.js"])
+    gulp.src(["./docs/index.js"])
         .pipe(rename({ suffix: ".min" }))
         .pipe(
             uglify({
@@ -27,7 +27,7 @@ gulp.task("page", cb => {
                 output: { ascii_only: false },
             })
         )
-        .pipe(gulp.dest("./"));
+        .pipe(gulp.dest("./docs/"));
     cb();
 });
 gulp.task("project:dist", () => {
@@ -69,6 +69,6 @@ gulp.task("watch", () => {
         ["dist/**/*.js", "src/**/*.js", "!**/*.min.js"],
         gulp.parallel(["project"])
     );
-    gulp.watch(["./index.css", "./index.js"], gulp.parallel(["page"]));
+    gulp.watch(["./index.css", "./index.js"], gulp.parallel(["docs"]));
 });
-gulp.task("default", gulp.parallel(["page", "project"]));
+gulp.task("default", gulp.parallel(["docs", "project"]));

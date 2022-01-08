@@ -60,6 +60,10 @@
     text-decoration: underline;
 }
 
+.btn-code-style {
+    margin-right: .5rem;
+}
+
 option {
     appearance: none;
     -moz-appearance: none;

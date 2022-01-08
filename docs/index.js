@@ -1,5 +1,5 @@
 // git params via url
-const queryParam = (function () {
+const queryParams = (function () {
     let searchTxt = window.location.search.substring(1);
     let searchArr = searchTxt.split("&");
     let obj = {};
@@ -39,9 +39,10 @@ const js_addJS =
     "j=t=>new Promise(r=>{let e=document.createElement('script');e.type='text/javascript',e.src=t,e.readyState?e.onreadystatechange=(()=>{['loaded','complete'].includes(e.readyState)&&r()}):e.onload=(()=>{r()});document.getElementsByTagName('head')[0].appendChild(e)});";
 
 // handle params
-var query = queryParam.query || "";
-var quality = queryParam.quality || "1080p+";
-var enforceRPC = !!queryParam["enforce-rpc"];
+var query = queryParams.query || "";
+var quality = queryParams.quality || "1080p+";
+var enforceRPC = !!queryParams["enforce-rpc"];
+var isUrlbarStyle = !!queryParams["urlbar"];
 const qs = [query, quality, enforceRPC];
 quality = QUAILITY_TABLE[quality];
 
@@ -67,9 +68,9 @@ function updateBiliUrl(Query = query) {
         if (Query) {
             vType = vType || (/^[0-9]*$/.test(Query) ? "av" : "BV");
             url =
-                vType == "av" && /[^0-9]/.test(Query)
-                    ? null
-                    : "https://b23.tv/" + vType + Query;
+                vType == "av" && /[^0-9]/.test(Query) ?
+                null :
+                "https://b23.tv/" + vType + Query;
             window.biliVideoUrl = url;
             return url;
         } else return (window.biliVideoUrl = null);
@@ -91,9 +92,9 @@ const zipTxt = str => {
     let newStr = "";
     for (let i = 0; i < str.length; i++) {
         const ele = str[i];
-        newStr += needTransf(ele)
-            ? "\\u" + ele.charCodeAt().toString(16).padStart(4, "0")
-            : ele;
+        newStr += needTransf(ele) ?
+            "\\u" + ele.charCodeAt().toString(16).padStart(4, "0") :
+            ele;
     }
     return "eval(window.atob('" + window.btoa(newStr) + "'))";
 };
@@ -102,8 +103,8 @@ const genEvalStr = {
     gen: (filename, funcRun, detectVar) => {
         return putAsync(
             js_addJS +
-                `if(!${detectVar})await j('${DLBILI.HOST}${DLBILI.DIR}${DLBILI.SUB_DIR}${filename}');` +
-                funcRun
+            `if(!${detectVar})await j('${DLBILI.HOST}${DLBILI.DIR}${DLBILI.SUB_DIR}${filename}');` +
+            funcRun
         );
     },
     auto: () => {
@@ -129,9 +130,10 @@ const genEvalStr = {
 };
 
 function updateOutput() {
-    document.querySelector("#output #auto").value = zipTxt(genEvalStr.auto());
+    const javascript_ = isUrlbarStyle ? "javascript:" : "";
+    document.querySelector("#output #auto").value = javascript_ + zipTxt(genEvalStr.auto());
     if (quality < 120) {
-        document.querySelector("#output #cur").value = zipTxt(genEvalStr.cur());
+        document.querySelector("#output #cur").value = javascript_ + zipTxt(genEvalStr.cur());
         document.querySelector("#output #cur").classList.remove("unsupport");
         document.querySelector("button#copy-cur").disabled = false;
     } else {
@@ -207,7 +209,7 @@ function autoShowGoBiliBtn() {
     query = document.querySelector("input[name=query]").value;
     biliVideoUrl = updateBiliUrl();
     if (biliVideoUrl) {
-        goBiliBtn.onclick = () => {
+        goBiliBtn.onclick = function () {
             window.open(biliVideoUrl);
         };
         goBiliBtn.style.display = "inline-block";
@@ -226,7 +228,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateOutput();
     };
     // 监测 enforce-rpc 变化，及时更新输出的 js
-    window.enforceRpcDom = document.querySelectorAll("input[name=enforce-rpc]");
+    const enforceRpcDom = document.querySelectorAll("input[name=enforce-rpc]");
     enforceRpcDom[1].onchange = () => {
         enforceRPC = enforceRpcDom[0].checked = enforceRpcDom[1].checked;
         updateOutput();
@@ -237,26 +239,41 @@ document.addEventListener("DOMContentLoaded", function () {
         Object.keys(QUAILITY_TABLE).indexOf(qs[1])
     ].selected = true;
     enforceRpcDom[0].checked = enforceRpcDom[1].checked = qs[2];
+    // javascript: <code>
+    document.querySelector("#code-style").onclick = function () {
+        if (isUrlbarStyle = !document.querySelector("#code-style").classList.contains("active"))
+            document.querySelector("#code-style").classList.add("active");
+        else
+            document.querySelector("#code-style").classList.remove("active");
+        document.querySelector("input[name=urlbar]").checked = isUrlbarStyle;
+        updateOutput();
+        const javascript_ = isUrlbarStyle ? "javascript:" : "";
+        document.querySelector("#output-evolved #evolved").value = javascript_ + zipTxt(
+            genEvalStr.evolved()
+        );
+    }
+    isUrlbarStyle && document.querySelector("#code-style").classList.add("active");
     // 监听 input 显示按钮
     autoShowGoBiliBtn();
     if (document.querySelector("input[name=query]").oninput !== undefined)
         document.querySelector("input[name=query]").oninput = autoShowGoBiliBtn;
     else
         document.querySelector("input[name=query]").onpropertychange =
-            autoShowGoBiliBtn;
+        autoShowGoBiliBtn;
     // 复制
-    document.querySelector("button#copy-auto").onclick = () => {
+    document.querySelector("button#copy-auto").onclick = function () {
         copyText("auto");
     };
-    document.querySelector("button#copy-cur").onclick = () => {
+    document.querySelector("button#copy-cur").onclick = function () {
         copyText("cur");
     };
-    document.querySelector("button#copy-evolved").onclick = () => {
+    document.querySelector("button#copy-evolved").onclick = function () {
         copyText("evolved");
     };
     // JS输出
     updateOutput();
-    document.querySelector("#output-evolved #evolved").value = zipTxt(
+    const javascript_ = isUrlbarStyle ? "javascript:" : "";
+    document.querySelector("#output-evolved #evolved").value = javascript_ + zipTxt(
         genEvalStr.evolved()
     );
 });
@@ -272,7 +289,7 @@ document.addEventListener("DOMContentLoaded", function () {
     evolvedBox.classList.remove("temp");
 
     window.onAnimateEvolved = false;
-    document.querySelector("#output-evolved #control").onclick = () => {
+    document.querySelector("#output-evolved #control").onclick = function () {
         if (!onAnimateEvolved) {
             onAnimateEvolved = true;
             if (!evolvedBox.classList.contains("open")) {
@@ -293,11 +310,11 @@ document.addEventListener("DOMContentLoaded", function () {
     //setInterval(() => {
     footerDom.style.transform =
         "translateY(" +
-        (document.body.clientHeight - window.innerHeight
-            ? 0
-            : document.body.clientHeight -
-              footerDom.offsetTop -
-              footerDom.clientHeight) +
+        (document.body.clientHeight - window.innerHeight ?
+            0 :
+            document.body.clientHeight -
+            footerDom.offsetTop -
+            footerDom.clientHeight) +
         "px)";
     //}, 1);
 });
