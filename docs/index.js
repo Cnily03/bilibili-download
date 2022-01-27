@@ -14,13 +14,12 @@ const queryParams = (function () {
 
 // const
 const DLBILI = {
+    REPO: "bilibili-download@master",
     HOST: "https://cdn.jsdelivr.net/gh/Cnily03",
-    DIR: (() => {
-        let pathArr = window.location.pathname.split("/");
-        pathArr[pathArr.length - 2] += "@master";
-        pathArr[pathArr.length - 1] = "";
-        return pathArr.join("/");
-    })(),
+    get DIR() {
+        delete DLBILI.DIR;
+        return DLBILI.DIR = `/${DLBILI.REPO}/`
+    },
     SUB_DIR: "dist/",
 };
 const QUAILITY_TABLE = {
@@ -69,8 +68,8 @@ function updateBiliUrl(Query = query) {
             vType = vType || (/^[0-9]*$/.test(Query) ? "av" : "BV");
             url =
                 vType == "av" && /[^0-9]/.test(Query) ?
-                null :
-                "https://b23.tv/" + vType + Query;
+                    null :
+                    "https://b23.tv/" + vType + Query;
             window.biliVideoUrl = url;
             return url;
         } else return (window.biliVideoUrl = null);
@@ -259,7 +258,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector("input[name=query]").oninput = autoShowGoBiliBtn;
     else
         document.querySelector("input[name=query]").onpropertychange =
-        autoShowGoBiliBtn;
+            autoShowGoBiliBtn;
     // 复制
     document.querySelector("button#copy-auto").onclick = function () {
         copyText("auto");
