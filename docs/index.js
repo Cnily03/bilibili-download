@@ -54,6 +54,7 @@ function genQnParam(Quality = quality) {
 
 // Generate or update bilibili visiting url
 function updateBiliUrl(Query = query) {
+    const hasB23TV = Query.includes("b23.tv/");
     if (Query.length) {
         Query = Query.replace(/(.*\/)|(\?.*)/g, ""); // URL -> av/BV
         Query = Query.replace(/[^a-z0-9]/gi, ""); // reserve a-z A-Z 0-9
@@ -69,7 +70,7 @@ function updateBiliUrl(Query = query) {
             url =
                 vType == "av" && /[^0-9]/.test(Query) ?
                     null :
-                    "https://b23.tv/" + vType + Query;
+                    "https://b23.tv/" + (hasB23TV ? "" : vType) + Query;
             window.biliVideoUrl = url;
             return url;
         } else return (window.biliVideoUrl = null);

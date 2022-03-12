@@ -97,7 +97,7 @@ const dlbiliCur = async videoQuality => {
     });
     // Part of function {legalFilename} in dlbili.auto.js
     var vTitleLegal = document
-        .querySelector("span.tit")
+        .querySelector(".video-title.tit")
         .innerText.replace(
             /[\u002a\u002e\u003f\u0022\u003c\u003e\u007c\u002f\u005c]/g,
             "_"
