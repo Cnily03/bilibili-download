@@ -90,6 +90,7 @@ const dlbiliCur = async videoQuality => {
                 });
         } else if (items.length) {
             // only one video
+            let suffix=urls[i].suffix || genSuffix(urls[i].url);
             aEl.href = urlObject.createObjectURL(items[0].blob);
             aEl.download = filename + suffix;
             aEl.click();
